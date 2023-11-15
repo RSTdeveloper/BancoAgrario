@@ -36,8 +36,7 @@
     <script src="<?= base_url(); ?>/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- SweetAlert2 -->
     <script src="<?= base_url(); ?>/assets/plugins/sweetalert2/sweetalert2.min.js"></script>
-    <!-- AdminLTE App -->
-    <!--<script src="<?= base_url(); ?>/assets/dist/js/adminlte.min.js"></script>-->
+   
 
 <style>
         .prueba-foot {
@@ -50,7 +49,6 @@
 }
 
 .text-food {
-    /* margin: 0 0 -16px 0 !important; */
     text-align: center;
     font-size: small;
     color: var(--blue-dark);
@@ -202,15 +200,11 @@
             
         }
 
-
-        /***** ******************** */
         .main-content {
         width: 39%;
-        /*background-color:#212121;*/
         background-color:#0c99d9;
         border-radius: 10px;
         box-shadow: -11px -11px 19px -7px yellowgreen;
-        /* box-shadow: 1px 1px  5px #ff8c00; */
         margin: 10em 30vw;
         display: flex;
         border-bottom-left-radius: 10px; 
@@ -353,7 +347,6 @@
     </style>
 </head>
 <body>
-    <!--Hey! This is the original version of Simple CSS Waves-->
 
     <div class="header">
 
