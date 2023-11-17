@@ -167,7 +167,17 @@
                 </div>
             </section>
         </div>
+        <!-- /.content-wrapper -->
     </div>
+        <!-- <footer id="sticky-footer" class="flex-shrink-0 py-4 bg-light text-white-50">
+            <div class="container text-center">
+                <strong>RST Asociados 2021<?= (date('Y') == 2021) ? '' : ' - ' . date('Y') ?>.</strong>
+                <div class="float-right d-none d-sm-inline-block">
+                    <b>Version</b> 1.0.1
+                </div>
+            </div>
+        </footer> -->
+
     <footer id="sticky-footer" >
         
         <div class="center">
@@ -184,6 +194,8 @@
         </div>
     </footer>
     
+    <!-- ./wrapper -->
+
     <!-- AdminLTE for demo purposes -->
     <script src="<?= base_url(); ?>/assets/dist/js/demo.js"></script>
     <div class="modal fade" id="modalContentGeneral" tabindex="-1" aria-labelledby="modalAsignacionesLabel" aria-hidden="true">
@@ -247,6 +259,8 @@
             $('#divMetricas').empty();
             //ValidarCambioPass();
             let user_id = "<?php echo $_SESSION['Identificacion'] ?>";
+
+            //updateSessionData(user_id);
 
         });
 
@@ -343,14 +357,15 @@
                     }
                 }
                 let n=0;
-                $('#nro_obligaciones').html(`Ha gestionado ${n} de ${dataObligaciones.message.length} obligaciones`);
+                // $('#nro_obligaciones').html(`Ha gestionado ${n} de ${dataObligaciones.message.length} obligaciones`);
+                $('#nro_obligaciones').html(`Usted presenta ${dataObligaciones.message.length} obligación pendiente, seleccione abajo su obligación.`);
                 n=n+1;
                 let content = `<table class="table table-sm table-bordered m-0" style="white-space: nowrap; ">
                         <thead style="background-color:#424949 ; color:#FDFEFE">
                             <tr>
                                 <th></th>
                                 <th>OBLIGACIÓN</th>
-                                <th>FECHA DE PAGO</th>
+                                <th>FECHA DE VENCIMIENTO</th>
                                 <th>SALDO TOTAL DEUDA</th>
                                 <th>VALOR A PAGAR APROXIMADO</th>
                             </tr>
@@ -460,7 +475,7 @@
                         </div>`}
                     contModal += `</div>
                 <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" onclick="quitarCh()" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-danger" onclick="quitarCh()" data-dismiss="modal">Cancelar</button>
                 </div>`            
             $('#modalContent').html(contModal);
             $('#modalContentGeneral').modal({
@@ -472,6 +487,10 @@
                     $('#containerm').attr('style','display:block')
                 });
 
+
+            // $('#selDiasMora').change(function(e) {
+            //             $('#containerm').attr('style','display:block')
+            //         });
             $('#no_Btn').click(function(event) {
                     ModalNoPago(obligacion_source, obligacion_cliente);
                     return;
@@ -550,8 +569,7 @@
                                 <p for="observacion">¿Desea agregar algún comentario sobre el pago de su obligación?</p>
                                 <textarea class="form-control" name="observacion" id="observacion" placeholder="Observacion"
                                 rows=5></textarea>
-                                <p for="contacto">Un asesor nuestro se pondrá en contacto, por favor déjenos su número de celular:</p>
-                                <input type="number" class="form-control" name="contacto" id="contacto" placeholder="Numero de Celular">
+                                <p style="text-align:center; width: 100%;">Un asesor nuestro se pondrá en contacto.</p>
                             </div>
                         </div>
                         <hr>
@@ -560,8 +578,8 @@
                 </div>`
                 
                  contModal += `<div class="modal-footer">
-                 <button type="button" class="btn btn-secondary" onclick="quitarCh()" data-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn btn-primary" id="btnGuardar1" onclick="gestionClientes('No','${selDiasMora}')" style="background-color:#FB8C00;"><span id="loaderGestion" >Guardar</span></button>
+                 <button type="button" class="btn btn-danger" onclick="quitarCh()" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success" id="btnGuardar1" onclick="gestionClientes('No','${selDiasMora}')" ><span id="loaderGestion" >Enviar</span></button>
                 </div>`;
             $('#modalContent').html(contModal);
             $('#modalContentGeneral').modal({
@@ -585,6 +603,8 @@
             let obligacionInfo = obligacion_cliente.message[botonSelected];
             let obligacionData = obligacion_source.message[botonSelected];
             valor_cuota = formatter.format(obligacionData.valor_proxima_cuota);
+            //console.log(obligacionInfo);
+            //console.log(obligacionData);
             let contModal = '';
 
             if (obligacionData.dias_mora>0){
@@ -619,6 +639,9 @@
                                     rows=5></textarea>
                                 </div>
                             </div>
+                            <div  style="text-align:center; width: 100%;">
+                            Autorizo confirmación de pago por otros canales.
+                            </div>
                         <hr>
                         </div>
                     </form>
@@ -650,8 +673,8 @@
                 </div>`
             }
                 contModal +=`<div class="modal-footer">
-                <button type="button" class="btn btn-secondary" onclick="quitarCh()" data-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn btn-primary" id="btnGuardar" onclick="gestionClientes('Si','${selDiasMora}')" style="background-color:#FB8C00;"><span id="loaderGestion" >Guardar</span></button>
+                <button type="button" class="btn btn-danger" onclick="quitarCh()" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success" id="btnGuardar" onclick="gestionClientes('Si','${selDiasMora}')"><span id="loaderGestion" >Enviar</span></button>
                 </div>`;
             $('#modalContent').html(contModal);
             SelectRama()
@@ -833,14 +856,21 @@
             var future = new Date();
             let meses = 2
             var tdd = today.getDate();
+            //var fdd = future.getDate();
             var tmm = today.getMonth() + 1; //January is 0 so need to add 1 to make it 1!
+            //var fmm = future.getMonth() + 3; //January is 0 so need to add 1 to make it 1!
             var tyyyy = today.getFullYear();
+            //var fyyyy = future.getFullYear();
             if (tdd < 10) {
                 tdd = '0' + tdd
             }
             if (tmm < 10) {
                 tmm = '0' + tmm
             }
+            /* if (fmm > 12) {
+                 fyyyy + 1
+                 //fmm - 10
+             }*/
 
             function AddMes() {
                 var fecha = new Date(today);
@@ -1108,10 +1138,14 @@
             }
 
             selHojaGestion.html(optRama);
+            //console.log("dias de mora obligacion", obligacionInfo.dias_mora);
 
             if (tronco == tronco && obligacionInfo.dias_mora >= 0) {
                 selHojaGestion.removeAttr('disabled');
+                //console.log("mora = ", obligacionInfo.dias_mora);
             } else if (idrama == "" || tronco != "1") {
+                //ValidarEstadoCompromiso(tronco);
+                //console.log("test");
                 selHojaGestion.attr('disabled', 'disabled');
             } else {
                 //console.log("test de salida");
@@ -1121,10 +1155,12 @@
         }
 
         function generarObservacion(obligacion, identificacion, obligacionData) {
+            //console.log('observacion data ->obligaciondata',obligacionData);
             let observacion_cliente = "";
             let observacion_Data = "";
             let deudor_id = identificacion
             let deuda_Data = obligacionData.obligacion
+            //let tronco = $("#selTroncoGestion").find(':selected').data('name') || '';
             let rama = $("#selRamaGestion").find(':selected').data('name');
 
             let hoja = $("#selHojaGestion").find(':selected').data('name');
@@ -1166,6 +1202,13 @@
             $('#observacion').val(observacion_cliente);
         }
 
+
+        /*$(document.body).on('click', `#modalContent`, function(event) {
+            console.log("click en el modal ");
+            console.log(Test);
+        })*/
+
+
         function NuevoGestion(observacion_Data) {
 
             //console.log('Test',Test);
@@ -1185,6 +1228,10 @@
             let campoOpcionPago = $('#selOpcionPago').val(); //puede estar vacío
             let campoNumeroCuotas = $('#selCuotaPago').val(); //puede estar vacío
             let campoValorCompromiso = $('#valor_compromiso').val();
+            //let estadoContacto = $('#estadoContacto').val();
+            //let tipoEfectividad = $('#tipoEfectividadNuevo').val();
+            //let compromiso = $('#compromisoNuevo').val();
+            //console.log(selHojaGestion, campoValorCompromiso);
             let fecha_promesa = $('#fecha_promesa').val()
 
             if (selRamaGestion == '' || observacion_cliente == '') {
@@ -1202,6 +1249,7 @@
             let numeroCuotas = campoNumeroCuotas;
 
             if (numeroCuotas == "" || numeroCuotas == undefined) {
+                //console.log("numero de cuotas vacío");
                 numeroCuotas = null
 
             }
@@ -1209,6 +1257,7 @@
 
             let opcionPago = campoOpcionPago
             if (opcionPago == "" || opcionPago == undefined) {
+                //console.log("numero de cuotas vacío");
                 opcionPago = null
 
             } else {
@@ -1220,15 +1269,20 @@
             let valorPago = campoValorCompromiso;
             if (valorPago == '' || valorPago == undefined) {
                 valorPago = null
+                //console.log("valor pago vacio");
 
             }
             formData += '&valor_pago=' + valorPago
 
             if (fecha_promesa == '' || fecha_promesa == undefined) {
+                //console.log("fecha vacío");
                 fecha_promesa = "-"
+                //console.log(fecha_promesa);
 
             }
             formData += '&fecha_promesa=' + fecha_promesa;
+
+            //console.log(formData);
 
             $.ajax({
                 type: "post",
@@ -1240,6 +1294,7 @@
                     $('#loaderGestion').html('<i class="fas fa-sync-alt fa-spin"></i>');
                 },
                 success: function(data) {
+                    //console.log(data);
                     if (data.type == 'error') {
                         Toast.fire({
                             icon: 'error',
@@ -1247,7 +1302,7 @@
                         }).then((result) => {
                             if (result) {
                                 $('#btnGuardarGestion').removeAttr('disabled');
-                                $('#loaderGestion').html('Guardar');
+                                $('#loaderGestion').html('Enviar');
                             }
                         });
                     } else {
@@ -1257,7 +1312,7 @@
                         }).then((result) => {
                             if (result) {
                                 $('#btnGuardarGestion').removeAttr('disabled');
-                                $('#loaderGestion').html('Guardar');
+                                $('#loaderGestion').html('Enviar');
                                 $('#modalContentGeneral').modal('hide');
                                 ConsultarCliente();
                             }
@@ -1266,7 +1321,7 @@
                 },
                 error: function(err) {
                     $('#btnGuardarGestion').removeAttr('disabled');
-                    $('#loaderGestion').html('Guardar');
+                    $('#loaderGestion').html('Enviar');
                     console.log(err)
                 }
             });
