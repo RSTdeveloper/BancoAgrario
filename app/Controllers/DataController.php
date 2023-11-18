@@ -193,8 +193,9 @@ class DataController extends BaseController
         $observacion = $this->request->getPost('observacion');
         $acuerdo_pago = $this->request->getPost('acuerdo_pago');
         $contacto = $this->request->getPost('contacto');
+        $autorizacioncanales = $this->request->getPost('autorizacioncanales');
 
-        $data = $this->dataModel->GestionNueva( $schema,$obligacion,$sel,$observacion,$acuerdo_pago,$contacto);
+        $data = $this->dataModel->GestionNueva( $schema,$obligacion,$sel,$observacion,$acuerdo_pago, $contacto, $autorizacioncanales);
         $resdata = ($data > 0) ? array('type' => 'success', 'message' => 'Modificcion con exito.') : array('type' => 'error', 'message' => 'Error al Modificar.');
         echo json_encode($resdata);
     }

@@ -531,39 +531,8 @@
                    <form method="post" id="formAutoGestion">
                     <div class="row">`
 
-                    if (obligacionData.dias_mora>0){}else{
 
-                contModal += `<div class="col-md-12 col-lg-12" id="divSelRamaTip">
-                        <div class="form-group">
-                            <p for="noPago">CAUSA DE NO PAGO</p>
-                            <select name="selNoPago" id="selNoPago" class="form-control mb-3">
-                                <option >Seleccione</option>
-                                <option >ARREGLO EN TRAMITE DEMORA</option>
-                                    <option >CANCELA UN TERCERO</option>
-                                    <option >CON RECURSOS EN LA CUENTA</option>
-                                    <option >CUOTA LA PAGA CONVENIO GO</option>
-                                    <option >DESCONOCE CONDICIONES PAGO</option>
-                                    <option >DESEMPLEADO</option>
-                                    <option >DESPLAZADO</option>
-                                    <option >EL CONTACTO NO INFORMA</option>
-                                    <option >FACTOR CLIMÁTICO</option>
-                                    <option >FALLECIDO</option>
-                                    <option >INVALIDEZ</option>
-                                    <option >OFIC CIERRE SIN SIST DEMO</option>
-                                    <option >ORDEN PÚBLICO</option>
-                                    <option >POR OLVIDO O VIAJE</option>
-                                    <option >PRIORIZA RECURSO SUSTENTO</option>
-                                    <option >PRIVADO DE LA LIBERTAD</option>
-                                    <option >PROY NO DIO UTILIDAD ESPE</option>
-                                    <option >RECLAMO EN TRÁMITE</option>
-                                    <option >RETRASO SALARIO/PENSIÓN</option>
-                                    <option >SANID ANIMAL-FITOSANITARI</option>
-                                    <option >SIN VENTA RECOLECC O PAGO</option>
-                                    <option >VALOR CUOTA MUY ALTA</option>
-                            </select>
-                        </div>
-                    </div>`
-                    }
+                
                 contModal += `<div class="col-md-12 col-lg-12">
                             <div class="form-group">
                                 <p for="observacion">¿Desea agregar algún comentario sobre el pago de su obligación?</p>
@@ -744,6 +713,18 @@
             let observacion = $("#observacion").val() || null;
             let selNoPago = $('#selNoPago').val() || null;
             let contacto = $('#contacto').val() || null;
+            let autorizacioncanales = $('#autorizacioncanales').val() || null;
+
+            console.log('acuerdo_pago 1=', acuerdo_pago);
+            if(acuerdo_pago=='Si'){
+                    autorizacioncanales = "Autoriza";
+                }
+                else{
+                    autorizacioncanales = "No Autoriza";           
+                }
+            
+           
+
             console.log(contacto);
             let sel = '';
             if(selDiasMora == null){
@@ -757,15 +738,17 @@
                 params.append('observacion', observacion);
                 params.append('acuerdo_pago', acuerdo_pago);
                 params.append('contacto', contacto);
+                params.append('autorizacioncanales', autorizacioncanales);
+                
                 let gestion = await axios.post("<?= base_url(); ?>/gestionnueva", params);
+
                 if(gestion.type == 'error'){
                     console.log('Fallido');
                 }else{
                     console.log('Exito');
                     console.log(dataObligaciones_source.message.length);                   
                 }
-                if(n == dataObligaciones_source.message.length )
-                {
+                 if(n == dataObligaciones_source.message.length ){
                     $('#si_Btn').attr('disabled','disabled');
                     $('#no_Btn').attr('disabled','disabled');
                     $('#nro_obligaciones').html(`Ha gestionado ${n} de ${dataObligaciones_source.message.length} obligaciones`);
