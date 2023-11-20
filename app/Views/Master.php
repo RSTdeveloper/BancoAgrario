@@ -111,14 +111,14 @@
         <!-- Navbar -->
         <nav class="navbar navbar-white navbar-light">
         
-        <img class="animation__shake img-icon" src="<?= base_url(); ?>/assets/dist/img/logo_agrario_b.png" alt="AdminLTELogo" height="60" width="60">
+        <img class="animation__shake img-icon" src="<?= base_url(); ?>/assets/dist/img/Logo_horizontal.png" alt="AdminLTELogo" height="60" width="60">
 
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto" >
                 <!-- Notifications Dropdown Menu -->
                 <li class="nav-item" >
-                    <a class="nav-link active" href="<?= base_url(); ?>/logout" role="button" onclick="gestionClientes('Abandona',null)">
-                        <i class="fas fa-sign-out-alt"></i>
+                    <a class="nav-link active" style="font-size: larger;" href="<?= base_url(); ?>/logout" role="button" onclick="gestionClientes('Abandona',null)">
+                        <i class="fas fa-sign-out-alt" ></i>
                         Salida Segura
                     </a>
                 </li>
@@ -134,7 +134,7 @@
                 <div class="card">
                     <div class="card-body">
                         <p class="text-center" style="font-size: 2.2rem; font-weight: bold; margin-top: 0;">Bienvenido!</p>
-                        <p class="text-center" style="font-size: 1.6rem; margin-top: 0;"><?= $_SESSION['Nombres'] ?> </p>
+                        <p class="text-center" style="font-size: 1.6rem; margin-top: 0;">Sr(a)  <?= $_SESSION[ 'Nombres'] ?> </p>
 
                     </div>
                 </div>
@@ -153,7 +153,7 @@
                                             <h2 id="nro_obligaciones" name="nro_obligaciones" class="w-100 text-center"></h2>
                                         </div>
                                         <div class="col-md-12 col-lg-12 ">
-                                            <p>Por favor seleccione la obligacion:</p>
+                                            <!-- <p>Por favor seleccione la obligacion:</p> -->
                                         </div>
                                         <div class="col-md-12 col-lg-12 table-responsive" id="tableDataCliente">
 
@@ -168,6 +168,11 @@
             </section>
         </div>
         <!-- /.content-wrapper -->
+        <div>
+            <p style="text-align: center;">
+            Le informamos que los datos suministrados por usted serán tratados de acuerdo a la política de protección de datos personales y la Ley 1581 de 2012.
+            </p>
+        </div>
     </div>
         <!-- <footer id="sticky-footer" class="flex-shrink-0 py-4 bg-light text-white-50">
             <div class="container text-center">
@@ -358,7 +363,12 @@
                 }
                 let n=0;
                 // $('#nro_obligaciones').html(`Ha gestionado ${n} de ${dataObligaciones.message.length} obligaciones`);
-                $('#nro_obligaciones').html(`Usted presenta ${dataObligaciones.message.length} obligación pendiente, seleccione abajo su obligación.`);
+
+                if (dataObligaciones.message.length == 1){
+                    $('#nro_obligaciones').html(`Usted presenta ${dataObligaciones.message.length} obligación pendiente, seleccione la que desea consultar:`);
+                }else{
+                    $('#nro_obligaciones').html(`Usted presenta ${dataObligaciones.message.length} obligaciónes pendientes, seleccione la que desea consultar:`);
+                }
                 n=n+1;
                 let content = `<table class="table table-sm table-bordered m-0" style="white-space: nowrap; ">
                         <thead style="background-color:#424949 ; color:#FDFEFE">
@@ -604,7 +614,7 @@
                             <div class="col-md-12 col-lg-12">
                                 <div class="form-group">
                                     <p for="observacion">¿Desea agregar algún comentario sobre el pago de su obligación?</p>
-                                    <textarea class="form-control" name="observacion" id="observacion" placeholder="Observacion"
+                                    <textarea class="form-control" name="observacion" id="observacion" oninput="validarTexto()" placeholder="Observacion"
                                     rows=5></textarea>
                                 </div>
                             </div>
@@ -629,13 +639,7 @@
                                     <p>Recuerde que su compromiso de pago se encuentra para la fecha: ${obligacionData.fecha_pago} por un valor aproximado de: ${valor_cuota}. Cuando realice el pago, por favor validar el valor.</p>
                                 </div>
                             </div>
-                            <div class="col-md-12 col-lg-12">
-                                <div class="form-group">
-                                    <p for="observacion">¿Desea agregar algún comentario sobre el pago de su obligación?</p>
-                                    <textarea class="form-control" name="observacion" id="observacion" placeholder="Observacion"
-                                    rows=5></textarea>
-                                </div>
-                            </div>
+                          
                         <hr>
                         </div>
                     </form>
@@ -780,10 +784,9 @@
                                     <h3 >Acuerdo guardado con Exito !</h3> 
                                     <hr>
                                     <div class="image">
-                                        <img src="<?= base_url(); ?>/assets/dist/img/logo_agrario.png" style="width:200px; height:200px;"  alt="User Image">
+                                        <img src="<?= base_url(); ?>/assets/dist/img/Logo_vertical.png" style="width:200px; height:200px;"  alt="User Image">
                                     </div>
                                     <hr>
-                                    <p>Le informamos que los datos suministrados por usted serán tratados de acuerdo a la política de protección de datos personales y la Ley 1581 de 2012.</p>
                                 </div>
                             </div>
                         <hr>
@@ -802,10 +805,9 @@
                                     <h3 >Información guardada con éxito !</h3> 
                                     <hr>
                                     <div class="image">
-                                        <img src="<?= base_url(); ?>/assets/dist/img/logo_agrario.png" style="width:200px; height:200px;"  alt="User Image">
+                                        <img src="<?= base_url(); ?>/assets/dist/img/Logo_vertical.png" style="width:200px; height:200px;"  alt="User Image">
                                     </div>
                                     <hr>
-                                    <p>Le informamos que los datos suministrados por usted serán tratados de acuerdo a la política de protección de datos personales y la Ley 1581 de 2012.</p>
                                 </div>
                             </div>
                         <hr>
@@ -1178,7 +1180,6 @@
                 observacion_Data = deuda_Data + " " + deudor_id + " " + tronco + " " + rama + " " + hoja + " " + opcion_pago + " " + valor_pago + " " + fecha_promesa + " " + selCuotaPago;
             }
             observacion_Data = deuda_Data + " " + deudor_id + " " + tronco + " " + rama + " " + hoja + " " + opcion_pago + " " + valor_pago + " " + fecha_promesa + " " + selCuotaPago;
-
             //console.log(observacion_Data);
 
             Test = observacion_Data
@@ -1190,6 +1191,31 @@
             console.log("click en el modal ");
             console.log(Test);
         })*/
+
+    //-----------------------------Validar enviar numeros-------------------------------------------
+    function validarTexto() {
+        // var textarea = document.getElementById("observacion");
+
+        // // Remover números y actualizar el valor del textarea
+        // textarea.value = textarea.value.replace(/\d/g, '');
+
+        // // Puedes mostrar un mensaje de advertencia si lo deseas
+        // if (/\d/.test(textarea.value)) {
+        //     alert("El texto no debe contener números. Se han eliminado.");
+        // }
+        // console.log("ERROR=", textarea.value)
+        var textarea = document.getElementById("observacion");
+            var contenido = textarea.value.trim(); // Elimina espacios al inicio y al final
+
+            // Verificar si el contenido solo contiene números
+            if (contenido !== '' && /^\d+$/.test(contenido)) {
+                alert("El texto no puede consistir solo en números. Por favor, ingrese otro contenido.");
+                return false; // Evita que se envíe el formulario
+            }
+
+        return true; // Permite enviar el formulario si no hay solo números
+    }
+    //------------------------------------------------------------------------
 
 
         function NuevoGestion(observacion_Data) {
