@@ -21,7 +21,6 @@
 			color: rgba(33, 37, 41, 1);
 			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
 			font-size: 16px;
-			margin: 0;
 			padding: 0;
 			-webkit-font-smoothing: antialiased;
 			-moz-osx-font-smoothing: grayscale;
@@ -37,7 +36,7 @@
 		header ul {
 			border-bottom: 1px solid rgba(242, 242, 242, 1);
 			list-style-type: none;
-			margin: 0;
+			
 			overflow: hidden;
 			padding: 0;
 			text-align: right;
@@ -95,11 +94,6 @@
 			background-color: rgba(221, 72, 20, .8);
 			color: rgba(255, 255, 255, .8);
 		}
-		header .heroe {
-			margin: 0 auto;
-			max-width: 1100px;
-			padding: 1rem 1.75rem 1.75rem 1.75rem;
-		}
 		header .heroe h1 {
 			font-size: 2.5rem;
 			font-weight: 500;
@@ -109,12 +103,8 @@
 			font-weight: 300;
 		}
 		section {
-			margin: 0 auto;
 			max-width: 1100px;
 			padding: 2.5rem 1.75rem 3.5rem 1.75rem;
-		}
-		section h1 {
-			margin-bottom: 2.5rem;
 		}
 		section h2 {
 			font-size: 120%;
@@ -170,26 +160,8 @@
 			header .menu-toggle {
 				padding: 0 1rem;
 			}
-			header .menu-item {
-				background-color: rgba(244, 245, 246, 1);
-				border-top: 1px solid rgba(242, 242, 242, 1);
-				margin: 0 15px;
-				width: calc(100% - 30px);
-			}
-			header .menu-toggle {
-				display: block;
-			}
-			header .hidden {
-				display: none;
-			}
-			header li.menu-item a {
-				background-color: rgba(221, 72, 20, .1);
-			}
-			header li.menu-item a:hover,
-			header li.menu-item a:focus {
-				background-color: rgba(221, 72, 20, .7);
-				color: rgba(255, 255, 255, .8);
-			}
+			
+			
 		}
 	</style>
 </head>

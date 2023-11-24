@@ -101,7 +101,7 @@
     <script src="<?= base_url(); ?>/assets/dist/js/adminlte.js"></script>
 </head>
 
-<body class="hold-transition sidebar-mini layout-fixed">
+<body >
     <div class="wrapper" style="height:85vh">
         <!-- Preloader -->
         <div class="preloader flex-column justify-content-center align-items-center">
@@ -111,7 +111,7 @@
         <!-- Navbar -->
         <nav class="navbar navbar-white navbar-light">
         
-        <img class="animation__shake img-icon" src="<?= base_url(); ?>/assets/dist/img/Logo_horizontal.png" alt="AdminLTELogo" height="60" width="60">
+        <img class="animation__shake img-icon"  src="<?= base_url(); ?>/assets/dist/img/BANCO_H_RST.png" alt="AdminLTELogo" >
 
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto" >
@@ -132,9 +132,9 @@
 
                 <!-- Default box -->
                 <div class="card">
-                    <div class="card-body">
+                    <div class="card-name">
                         <p class="text-center" style="font-size: 2.2rem; font-weight: bold; margin-top: 0;">Bienvenido!</p>
-                        <p class="text-center" style="font-size: 1.6rem; margin-top: 0;">Sr(a)  <?= $_SESSION[ 'Nombres'] ?> </p>
+                        <p class="text-name" >Sr(a) <?= $_SESSION[ 'Nombres'] ?> </p>
 
                     </div>
                 </div>
@@ -142,24 +142,19 @@
             </section>
             <section class="content">
                 <div>
-                    <div class="card ">
-                        <div class="card-body">
+                    <div class="card-main">
+                        <div class="card-tabla">
                             <div class="row mt-3">
                                 <div class="col-md-12 col-lg-12" style="position: relative; overflow-y: scroll; max-height: 500px;">
-
-
                                     <div class="row container-fluid m-0">
                                         <div class="col-md-12 col-lg-12 ">
-                                            <h2 id="nro_obligaciones" name="nro_obligaciones" class="w-100 text-center"></h2>
+                                            <h2 id="nro_obligaciones" name="nro_obligaciones" class="text-name"></h2>
                                         </div>
                                         <div class="col-md-12 col-lg-12 ">
-                                            <!-- <p>Por favor seleccione la obligacion:</p> -->
                                         </div>
                                         <div class="col-md-12 col-lg-12 table-responsive" id="tableDataCliente">
-
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -169,24 +164,16 @@
         </div>
         <!-- /.content-wrapper -->
         <div>
+            <br>
             <p style="text-align: center;">
             Le informamos que los datos suministrados por usted serán tratados de acuerdo a la política de protección de datos personales y la Ley 1581 de 2012.
             </p>
         </div>
     </div>
-        <!-- <footer id="sticky-footer" class="flex-shrink-0 py-4 bg-light text-white-50">
-            <div class="container text-center">
-                <strong>RST Asociados 2021<?= (date('Y') == 2021) ? '' : ' - ' . date('Y') ?>.</strong>
-                <div class="float-right d-none d-sm-inline-block">
-                    <b>Version</b> 1.0.1
-                </div>
-            </div>
-        </footer> -->
-
-    <footer id="sticky-footer" >
-        
+    
+    <!-- <footer id="" > -->
         <div class="center">
-            <strong>RST Asociados 2021<?= (date('Y') == 2021) ? '' : ' - ' . date('Y') ?>.</strong><br>
+            <strong>RST Asociados<?= (date('Y') == 2021) ? '' : ' - ' . date('Y') ?></strong><br>
             <b>Version</b> 1.0.1
         </div>
         <div class="footer-bar">
@@ -197,7 +184,7 @@
         <div class="bar-segment"></div>
         <div class="bar-segment"></div>
         </div>
-    </footer>
+    <!-- </footer> -->
     
     <!-- ./wrapper -->
 
@@ -205,7 +192,7 @@
     <script src="<?= base_url(); ?>/assets/dist/js/demo.js"></script>
     <div class="modal fade" id="modalContentGeneral" tabindex="-1" aria-labelledby="modalAsignacionesLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content">
+            <div class="modal-content" style="width: 98%;">
                 <div id="modalContent"></div>
             </div>
         </div>
@@ -362,12 +349,11 @@
                     }
                 }
                 let n=0;
-                // $('#nro_obligaciones').html(`Ha gestionado ${n} de ${dataObligaciones.message.length} obligaciones`);
 
                 if (dataObligaciones.message.length == 1){
-                    $('#nro_obligaciones').html(`Usted presenta ${dataObligaciones.message.length} obligación pendiente, seleccione la que desea consultar:`);
+                    $('#nro_obligaciones').html(`Usted presenta ${dataObligaciones.message.length} obligación pendiente, seleccione para consultar:`);
                 }else{
-                    $('#nro_obligaciones').html(`Usted presenta ${dataObligaciones.message.length} obligaciónes pendientes, seleccione la que desea consultar:`);
+                    $('#nro_obligaciones').html(`Usted presenta ${dataObligaciones.message.length} obligaciónes pendientes, seleccione para consultar:`);
                 }
                 n=n+1;
                 let content = `<table class="table table-sm table-bordered m-0" style="white-space: nowrap; ">
@@ -376,8 +362,8 @@
                                 <th></th>
                                 <th>OBLIGACIÓN</th>
                                 <th>FECHA DE VENCIMIENTO</th>
-                                <th>SALDO TOTAL DEUDA</th>
-                                <th>VALOR A PAGAR APROXIMADO</th>
+                                <th>SALDO TOTAL APROX.</th>
+                                <th>VALOR A PAGAR APROX.</th>
                             </tr>
                         </thead>
                         <tbody>`;
@@ -608,7 +594,7 @@
                             <div class="col-md-12 col-lg-12" id="divSelHojaTip">
                                 <div class="form-group w-100 text-center">
                                     <h3 >Hecho !</h3> 
-                                    <p>Recuerde que su compromiso de pago se encuentra para la fecha: ${today} por un valor aproximado de: ${valor_cuota}. Cuando realice el pago, por favor validar el valor.</p>
+                                    <p>Recuerde que su compromiso de pago se encuentra para la fecha: ${today} por un valor aproximado de: ${valor_cuota}. Cuando realice el pago, por favor valide el valor.</p>
                                 </div>
                             </div>
                             <div class="col-md-12 col-lg-12">
@@ -619,7 +605,7 @@
                                 </div>
                             </div>
                             <div  style="text-align:center; width: 100%;">
-                            Autorizo confirmación de pago por otros canales.
+                            <input name="#" type="checkbox" checked /> - Autorizo confirmación de pago por otros canales.
                             </div>
                         <hr>
                         </div>
@@ -636,7 +622,7 @@
                             <div class="col-md-12 col-lg-12" id="divSelHojaTip">
                                 <div class="form-group w-100 text-center">
                                     <h3 >Hecho !</h3> 
-                                    <p>Recuerde que su compromiso de pago se encuentra para la fecha: ${obligacionData.fecha_pago} por un valor aproximado de: ${valor_cuota}. Cuando realice el pago, por favor validar el valor.</p>
+                                    <p>Recuerde que su compromiso de pago se encuentra para la fecha: ${obligacionData.fecha_pago} por un valor aproximado de: ${valor_cuota}. Cuando realice el pago, por favor valide el valor.</p>
                                 </div>
                             </div>
                           
@@ -784,7 +770,7 @@
                                     <h3 >Acuerdo guardado con Exito !</h3> 
                                     <hr>
                                     <div class="image">
-                                        <img src="<?= base_url(); ?>/assets/dist/img/Logo_vertical.png" style="width:200px; height:200px;"  alt="User Image">
+                                        <img src="<?= base_url(); ?>/assets/dist/img/BANCO_V_RST.png" style="width:15rem; height:9rem;"  alt="User Image">
                                     </div>
                                     <hr>
                                 </div>
@@ -805,7 +791,7 @@
                                     <h3 >Información guardada con éxito !</h3> 
                                     <hr>
                                     <div class="image">
-                                        <img src="<?= base_url(); ?>/assets/dist/img/Logo_vertical.png" style="width:200px; height:200px;"  alt="User Image">
+                                        <img src="<?= base_url(); ?>/assets/dist/img/BANCO_V_RST.png" style="width:15rem; height:9rem;"  alt="User Image">
                                     </div>
                                     <hr>
                                 </div>
@@ -1194,34 +1180,17 @@
 
     //-----------------------------Validar enviar numeros-------------------------------------------
     function validarTexto() {
-        // var textarea = document.getElementById("observacion");
-
-        // // Remover números y actualizar el valor del textarea
-        // textarea.value = textarea.value.replace(/\d/g, '');
-
-        // // Puedes mostrar un mensaje de advertencia si lo deseas
-        // if (/\d/.test(textarea.value)) {
-        //     alert("El texto no debe contener números. Se han eliminado.");
-        // }
-        // console.log("ERROR=", textarea.value)
         var textarea = document.getElementById("observacion");
             var contenido = textarea.value.trim(); // Elimina espacios al inicio y al final
 
-            // Verificar si el contenido solo contiene números
-            if (contenido !== '' && /^\d+$/.test(contenido)) {
+            if (contenido !== '' && /^\d+$/.test(contenido)) {// Verificar si el contenido solo contiene números
                 alert("El texto no puede consistir solo en números. Por favor, ingrese otro contenido.");
                 return false; // Evita que se envíe el formulario
             }
-
         return true; // Permite enviar el formulario si no hay solo números
     }
     //------------------------------------------------------------------------
-
-
         function NuevoGestion(observacion_Data) {
-
-            //console.log('Test',Test);
-
             ValidarSesion();
             var Toast = Swal.mixin({
                 toast: true,
@@ -1237,10 +1206,6 @@
             let campoOpcionPago = $('#selOpcionPago').val(); //puede estar vacío
             let campoNumeroCuotas = $('#selCuotaPago').val(); //puede estar vacío
             let campoValorCompromiso = $('#valor_compromiso').val();
-            //let estadoContacto = $('#estadoContacto').val();
-            //let tipoEfectividad = $('#tipoEfectividadNuevo').val();
-            //let compromiso = $('#compromisoNuevo').val();
-            //console.log(selHojaGestion, campoValorCompromiso);
             let fecha_promesa = $('#fecha_promesa').val()
 
             if (selRamaGestion == '' || observacion_cliente == '') {
