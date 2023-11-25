@@ -128,4 +128,6 @@ nb-configuration.xml
 # Carpetas para Ignorar 
 /public
 /assets/plugins
+/assets/rst_generic_schema_20210701_20210731
+/assets/uploads
 
