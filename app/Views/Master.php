@@ -133,9 +133,8 @@
                 <!-- Default box -->
                 <div class="card">
                     <div class="card-name">
-                        <p class="text-center" style="font-size: 2.2rem; font-weight: bold; margin-top: 0;">Bienvenido!</p>
+                        <p class="text-center saludo" >Bienvenido!</p>
                         <p class="text-name" >Sr(a) <?= $_SESSION[ 'Nombres'] ?> </p>
-
                     </div>
                 </div>
 
@@ -144,7 +143,7 @@
                 <div>
                     <div class="card-main">
                         <div class="card-tabla">
-                            <div class="row mt-3">
+                            <div class="obligacion">
                                 <div class="col-md-12 col-lg-12" style="position: relative; overflow-y: scroll; max-height: 500px;">
                                     <div class="row container-fluid m-0">
                                         <div class="col-md-12 col-lg-12 ">
@@ -152,7 +151,7 @@
                                         </div>
                                         <div class="col-md-12 col-lg-12 ">
                                         </div>
-                                        <div class="col-md-12 col-lg-12 table-responsive" id="tableDataCliente">
+                                        <div class="col-md-12 col-lg-12 table-respon" id="tableDataCliente">
                                         </div>
                                     </div>
                                 </div>
@@ -164,17 +163,17 @@
         </div>
         <!-- /.content-wrapper -->
         <div>
-            <br>
-            <p style="text-align: center;">
+            
+            <p class="text-info">
             Le informamos que los datos suministrados por usted serán tratados de acuerdo a la política de protección de datos personales y la Ley 1581 de 2012.
             </p>
         </div>
     </div>
     
     <!-- <footer id="" > -->
-        <div class="center">
+        <div class="center barra">
             <strong>RST Asociados<?= (date('Y') == 2021) ? '' : ' - ' . date('Y') ?></strong><br>
-            <b>Version</b> 1.0.1
+            <b>Version</b> 1
         </div>
         <div class="footer-bar">
         <div class="bar-segment"></div>
@@ -351,46 +350,105 @@
                 let n=0;
 
                 if (dataObligaciones.message.length == 1){
-                    $('#nro_obligaciones').html(`Usted presenta ${dataObligaciones.message.length} obligación pendiente, seleccione para consultar:`);
+                    
+                    $('#nro_obligaciones').html(`A continuación podrá ver el estado de su obligación, seleccione para mas información:`);
+                    // $('#nro_obligaciones').html(`Usted presenta ${dataObligaciones.message.length} obligación pendiente, seleccione para consultar:`);
                 }else{
                     $('#nro_obligaciones').html(`Usted presenta ${dataObligaciones.message.length} obligaciónes pendientes, seleccione para consultar:`);
                 }
                 n=n+1;
-                let content = `<table class="table table-sm table-bordered m-0" style="white-space: nowrap; ">
-                        <thead style="background-color:#424949 ; color:#FDFEFE">
-                            <tr>
-                                <th></th>
-                                <th>OBLIGACIÓN</th>
-                                <th>FECHA DE VENCIMIENTO</th>
-                                <th>SALDO TOTAL APROX.</th>
-                                <th>VALOR A PAGAR APROX.</th>
-                            </tr>
-                        </thead>
-                        <tbody>`;
+                saldooo= parseInt(dataObligaciones.message[0].saldo_total)
+                saldo_to =saldooo.toLocaleString();
+
+                Ncuenta= String(dataObligaciones.message[0].obligacion)
+                cuenta = "*********" + Ncuenta.slice(10);
+
+                        let content = `
+                        <div class="containerr">
+                            <div class="block-data">
+                                <div class="block-source">
+                                    <span class="name-data">OBLIGACIÓN: </span>
+                                    <div  class="result-data">
+                                        <p style="height: 50%;">${cuenta}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="block-data">
+                                <div class="block-source">
+                                    <span class="name-data">FECHA DE VENCIMIENTO: </span>
+                                    <div  class="result-data">
+                                        <p style="height: 50%;">${dataObligaciones.message[0].fecha_pago}</p>
+                                    </div>
+                                </div>
+                            </div> 
+                            
+                            <div class="block-data">
+                                <div class="block-source">
+                                    <span class="name-data">SALDO TOTAL APROXN.: </span>
+                                    <div  class="result-data">
+                                        <p style="height: 50%;">$ ${saldo_to}</p>
+                                    </div>
+                                </div>
+                            </div> 
+                            
+                            <div class="block-data">
+                                <div class="block-source">
+                                    <span class="name-data">VALOR A PAGAR APROX.: </span>
+                                    <div  class="result-data">
+                                        <p style="height: 50%;">${valor_proxima_cuota}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                                <table class="button-table">
+                            <tbody>
+                        </div>
+                        `;
+                     
+
                 for (var key1 in dataObligaciones.message) {
                     
                    
                     content += '<tr>';
                     content += `<td id="casillaopt">   
                                 <div class="radio" >
-                                <label><input type="radio" id="data${key1}" value="${dataObligaciones.message[key1].obligacion}" name="optradio" data-key="${key1}"></label>
+                                <label><input type="radio" class="raious" id="data${key1}" value="${dataObligaciones.message[key1].obligacion}" name="optradio" data-key="${key1}"></label>
                                 </div>
                                 </td>`;                    
-                    var dd = dataObligaciones.message[key1]['obligacion'];
+                    var dd = dataObligaciones.message[0]['obligacion'];
                     var replaced = dd.replace(/.(?=.{5,}$)/g, '*');
-                    dataObligaciones.message[key1]['obligacion'] = replaced;
+                    dataObligaciones.message[0]['obligacion'] = replaced;
                     valor_proxima_cuota = dataObligaciones.message[key1].valor_proxima_cuota.replace(/,/g, '.');
                     valor_proxima_cuota = formatter.format(parseInt(valor_proxima_cuota));
-                    dataObligaciones.message[key1].valor_proxima_cuota = valor_proxima_cuota
+                    
+                    dataObligaciones.message[key1].valor_proxima_cuota = valor_proxima_cuota;
+                    
+
+
+
+                    console.log("------------------------------------------------")  ;
+                    console.log("P10 =",dd );
+                    let nuevaCadena = "*****" + dd.slice(5);
+                    console.log("P11 =",dataObligaciones.message[0]['obligacion'] );
+
+                    nuevoNumero = dataObligaciones.message[0]['obligacion'];
+
+                    numeroSifrado = "*****" + dataObligaciones.message[0].replace;
+                    console.log("P12 =",nuevaCadena)  ;
+
+
+
+
+
+
 
                     saldo_total = dataObligaciones.message[key1].saldo_total.replace(/,/g, '.');
+
                     saldo_total = formatter.format(saldo_total)
                     dataObligaciones.message[key1].saldo_total = saldo_total
                         
-                            content += `<td>${replaced}</td>
-                            <td>${obligacionData.message[key1]['fecha_pago']}</td>
-                            <td>${saldo_total}</td>
-                            <td>${valor_proxima_cuota}</td>`;
+                            
                         
                     
                     content += '</tr>';
@@ -404,7 +462,7 @@
                 
                 var radios = document.getElementsByName('optradio');
                 $.each(radios, async function(i, v) { 
-                    console.log(v.value)  
+                    console.log("Prueba1=",v.value)  
                     let validarObl = await axios.get("<?= base_url(); ?>/validarobligacion", {
                         params: {
                             obligacion: v.value
