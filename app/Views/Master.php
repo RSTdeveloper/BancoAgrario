@@ -385,7 +385,7 @@
                             
                             <div class="block-data">
                                 <div class="block-source">
-                                    <span class="name-data">SALDO TOTAL APROXN.: </span>
+                                    <span class="name-data">SALDO TOTAL APROX.: </span>
                                     <div  class="result-data">
                                         <p style="height: 50%;">$ ${saldo_to}</p>
                                     </div>
@@ -590,7 +590,7 @@
                 contModal += `<div class="col-md-12 col-lg-12">
                             <div class="form-group">
                                 <p for="observacion">¿Desea agregar algún comentario sobre el pago de su obligación?</p>
-                                <textarea class="form-control" name="observacion" id="observacion" placeholder="Observacion"
+                                <textarea class="form-control" name="observacion" id="observacion" oninput="validarTexto()" placeholder="Observacion"
                                 rows=5></textarea>
                                 <p style="text-align:center; width: 100%;">Un asesor nuestro se pondrá en contacto.</p>
                             </div>
@@ -626,22 +626,52 @@
             let obligacionInfo = obligacion_cliente.message[botonSelected];
             let obligacionData = obligacion_source.message[botonSelected];
             valor_cuota = formatter.format(obligacionData.valor_proxima_cuota);
-            //console.log(obligacionInfo);
-            //console.log(obligacionData);
             let contModal = '';
 
-            if (obligacionData.dias_mora>0){
-                var today = new Date();
-                var tdd = today.getDate()+ 3;
-                var tmm = today.getMonth() + 1;
-                var tyyyy = today.getFullYear();
-                if (tdd < 10) {
-                    tdd = '0' + tdd
+            //-----------------------------------------------------------------------------------------------------------
+                // Obtener la fecha actual
+                const fechaActual = new Date();
+
+                // Sumarle 3 días a la fecha actual
+                const diasASumar = 3;
+                const nuevaFecha = new Date(fechaActual);
+                nuevaFecha.setDate(fechaActual.getDate() + diasASumar);
+
+                const fechaISO = nuevaFecha.toISOString();
+                const fecha = new Date(fechaISO)
+                const day = fecha.getDate();
+                const mount = fecha.getMonth()+1;
+                const year = fecha.getFullYear();
+
+                // Imprimir las fechas
+                console.log('Fecha actual:', fechaActual.toISOString());
+                console.log(`Fecha después de sumar ${diasASumar} días:`, nuevaFecha.toISOString(),);
+                console.log('Fecha ISO:', fechaISO);
+                console.log('Fecha ISO:', day, mount, year);
+            //-----------------------------------------------------------------------------------------------------------
+
+            if (obligacionData.dias_mora > 0) {
+                // Obtener la fecha actual
+                const fechaActual = new Date();
+
+                // Sumarle 3 días a la fecha actual excluyendo sábados y domingos
+                const diasASumar = 3;
+                let nuevaFecha = new Date(fechaActual);
+
+                for (let i = 0; i < diasASumar;) {
+                    nuevaFecha.setDate(nuevaFecha.getDate() + 1);
+
+                    // Verificar si el día de la semana no es sábado (6) ni domingo (0)
+                    if (nuevaFecha.getDay() !== 6 && nuevaFecha.getDay() !== 0) {
+                        i++;
+                    }
                 }
-                if (tmm < 10) {
-                    tmm = '0' + tmm
-                }
-                today = tdd + '/' + tmm + '/' + tyyyy;
+
+                const tdd = nuevaFecha.getDate();
+                const tmm = nuevaFecha.getMonth() + 1;
+                const tyyyy = nuevaFecha.getFullYear();
+                dateAgreement = tdd + '/' + tmm + '/' + tyyyy;
+
                 contModal += `<div class="modal-header" style="background-color:#424949 ; color:#FDFEFE">
                     <h5 class="modal-title" id="contentModalLabel">Gestión de Obligación</h5>
                     
@@ -652,7 +682,7 @@
                             <div class="col-md-12 col-lg-12" id="divSelHojaTip">
                                 <div class="form-group w-100 text-center">
                                     <h3 >Hecho !</h3> 
-                                    <p>Recuerde que su compromiso de pago se encuentra para la fecha: ${today} por un valor aproximado de: ${valor_cuota}. Cuando realice el pago, por favor valide el valor.</p>
+                                    <p>Recuerde que su compromiso de pago se encuentra para la fecha ${dateAgreement} por un valor aproximado de: ${valor_cuota}. Cuando realice el pago, por favor valide el valor.</p>
                                 </div>
                             </div>
                             <div class="col-md-12 col-lg-12">
@@ -680,7 +710,7 @@
                             <div class="col-md-12 col-lg-12" id="divSelHojaTip">
                                 <div class="form-group w-100 text-center">
                                     <h3 >Hecho !</h3> 
-                                    <p>Recuerde que su compromiso de pago se encuentra para la fecha: ${obligacionData.fecha_pago} por un valor aproximado de: ${valor_cuota}. Cuando realice el pago, por favor valide el valor.</p>
+                                    <p>Recuerde que su compromiso de pago se encuentra para la fecha ${obligacionData.fecha_pago} por un valor aproximado de: ${valor_cuota}. Cuando realice el pago, por favor valide el valor.</p>
                                 </div>
                             </div>
                           
@@ -825,7 +855,7 @@
                         <div class="row">
                             <div class="col-md-12 col-lg-12" id="divSelHojaTip">
                                 <div class="form-group w-100 text-center">
-                                    <h3 >Acuerdo guardado con Exito !</h3> 
+                                    <h3>Información guardada con Exito !</h3> 
                                     <hr>
                                     <div class="image">
                                         <img src="<?= base_url(); ?>/assets/dist/img/BANCO_V_RST.png" style="width:15rem; height:9rem;"  alt="User Image">

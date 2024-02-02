@@ -31,9 +31,9 @@ class Database extends Config
      * @var array
      */
     public $default = [
-		'DSN'      => 'pgsql:host=192.168.0.122;port=5432;dbname=rst;user=sophia;password=T34m*-RST',
+		'DSN'      => 'pgsql:host=172.16.10.85;port=5432;dbname=rst;user=sophia;password=T34m*-RST',
 		//'DSN'      => '',
-		'hostname' => '192.168.0.122',
+		'hostname' => '172.16.10.85',
 		'username' => 'sophia',
 		'password' => 'T34m*-RST',
 		'database' => 'rst',

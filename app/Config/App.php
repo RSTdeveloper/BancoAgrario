@@ -30,7 +30,7 @@ class App extends BaseConfig
             $this->baseURL = 'http://localhost:8080/';
         } elseif ($_SERVER['SERVER_NAME'] == 'consulta.rstasociados.com.co') {
             $this->baseURL = 'https://consulta.rstasociados.com.co/';
-        } elseif ($_SERVER['SERVER_NAME'] == '192.168.0.130') {
+        } elseif ($_SERVER['SERVER_NAME'] == '172.16.10.75') {
             $this->baseURL = 'https://www.consulta.rstasociados.com.co/';
         } elseif ($_SERVER['SERVER_NAME'] == 'www.consulta.rstasociados.com.co') {
             $this->baseURL = 'https://www.consulta.rstasociados.com.co/';
