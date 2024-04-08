@@ -41,62 +41,41 @@
      <!-- Theme style -->
      <link rel="stylesheet" href="<?= base_url(); ?>/assets/dist/css/login.css">
 
-<style>
-    </style>
+
 </head>
-<body>
-    <div class="header">
-        <!--Content before waves-->
-        <div class="inner-header flex">
-            <div class="container-fluid ">
-		        <div class="row main-content  text-center">
-			        <div class="col-md-4 text-center align-items-center company__info fondologin">
-                        <div class="fondo-login">
-                            
-                        </div>
-                        <!-- <img src="<?= base_url(); ?>/assets/dist/img/BANCO_H_RST.png" style="width:80%; height:5rem;"  alt="RST Image"> -->
-			        </div>
-			        <div class="col-md-8 col-xs-12 col-sm-12 login_form ">
-				        <div class="container-fluid">					
-						    <h2>Bienvenido</h2>	
-                            <div class="row der secondbtn">
-                                <input type="button" value="Iniciar Sesión" class="btn" onclick="IniciarSesion()">
-                            </div>			
-						    <form autocomplete="off" method="post" id="formIngresar" control="" class="form-group">
-							    <div class="row der">
-								    <input autocomplete="off" type="number" name="cedula" id="cedula" class="formcontrol" placeholder="Ingrese número de identificación" autocomplete="off">
-							    </div>
-							    <div class="row der">
-								    <input type="password" name="validar" id="validar" class="formcontrol" placeholder="Ingrese código de acceso recibido" autocomplete="off">
-							    </div>							
-							    <div class="row der firstbtn">
-								    <input type="button" value="Iniciar Sesión" class="btn" onclick="IniciarSesion()">
-							    </div>
-						    </form>                        
-				        </div>
-			        </div>
-		        </div>
-	        </div>
-        </div>    
-        <div>
-            <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
-                <defs>
-                    <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
-                </defs>
-                <g class="parallax">
-                    <use xlink:href="#gentle-wave" x="48" y="0" fill="rgba(255,255,255,0.7" />
-                    <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.5)" />
-                    <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0.3)" />
-                    <use xlink:href="#gentle-wave" x="48" y="7" fill="#fff" />
-                </g>
-            </svg>
+<body>   
+<div class="prueba">  
+    <div class="wrapper">
+        <img src="<?= base_url(); ?>/assets/dist/img/fondo.png" class="logo" alt="RST Image">
+        <div class="title-text">
+            <div class="title login">Bienvenido</div>
+        </div>	
+        <div class="form-container">
+            <div class="form-inner">   
+                <form autocomplete="off" method="post" id="formIngresar" control="" class="login tex-ali">
+                        <input type="button" value="Iniciar Sesión"  onclick="IniciarSesion()">
+                    <div class="field">
+                        <input type="number" name="cedula" id="cedula"  placeholder="Número de documento" autocomplete="off">
+                    </div>
+                    <div class="field">
+                        <input type="password" name="validar" id="validar" class="formcontrol" placeholder="Código del mensaje" autocomplete="off">
+                    </div>							
+                </form>
+            </div>
         </div>
     </div>
 </body>
 <footer class="prueba-foot footer-login">
-    <div class="icon-foot">
-        <label class="text-foot">RST Asociados todos los derechos revervados. </label>
-        <!-- <img src="<?= base_url(); ?>/assets/dist/img/logoIcon.png" style="width:2rem; height:2rem;">          -->
+    <div class="text-food">
+        <strong>RST Asociados todos los derechos reservados.</strong>
+    </div>
+    <div class="footer-bar">
+      <div class="bar-segment"></div>
+      <div class="bar-segment"></div>
+      <div class="bar-segment"></div>
+      <div class="bar-segment"></div>
+      <div class="bar-segment"></div>
+      <div class="bar-segment"></div>
     </div>
 </footer>
     <script>
@@ -120,6 +99,7 @@
         });
         async function IniciarSesion()
         {
+            console.log("Iniciando Sesión-1")
             let identificacion= $('#cedula').val();
             let username= $('#validar').val();
             if(identificacion == '' && username ==''){
@@ -176,6 +156,7 @@
                     console.log(err)
                 }
             });
+            console.log("Iniciando Sesión-2")
         }
     </script>
 </html>

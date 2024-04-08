@@ -23,17 +23,17 @@ class App extends BaseConfig
      *
      * @var string
      */
-    public $baseURL = 'consulta.rstasociados.com.co';
+    public $baseURL = 'fna.rstasociados.com.co';
     public function __construct()
     {
         if ($_SERVER['SERVER_NAME'] == 'localhost') {
             $this->baseURL = 'http://localhost:8080/';
-        } elseif ($_SERVER['SERVER_NAME'] == 'consulta.rstasociados.com.co') {
-            $this->baseURL = 'https://consulta.rstasociados.com.co/';
-        } elseif ($_SERVER['SERVER_NAME'] == '172.16.10.75') {
-            $this->baseURL = 'https://www.consulta.rstasociados.com.co/';
-        } elseif ($_SERVER['SERVER_NAME'] == 'www.consulta.rstasociados.com.co') {
-            $this->baseURL = 'https://www.consulta.rstasociados.com.co/';
+        } elseif ($_SERVER['SERVER_NAME'] == 'fna.rstasociados.com.co') {
+            $this->baseURL = 'https://fna.rstasociados.com.co/';
+        } elseif ($_SERVER['SERVER_NAME'] == '172.16.10.76') {
+            $this->baseURL = 'https://www.fna.rstasociados.com.co/';
+        } elseif ($_SERVER['SERVER_NAME'] == 'www.fna.rstasociados.com.co') {
+            $this->baseURL = 'https://www.fna.rstasociados.com.co/';
         } else {
             $this->baseURL = 'https://localhost/';
         }

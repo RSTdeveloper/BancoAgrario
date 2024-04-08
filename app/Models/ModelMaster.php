@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use CodeIgniter\CLI\Console;
 use CodeIgniter\Model;
 
 class ModelMaster extends Model
@@ -10,7 +11,7 @@ class ModelMaster extends Model
     {
         try {
             // $sql = "SELECT *  FROM public.obligacionespublic as o
-            $sql = "SELECT *  FROM rst_banco_agrario_lp_schema.obligaciones as o
+            $sql = "SELECT *  FROM fnalanding.obligaciones as o
             WHERE o.identificacion LIKE '%$id_cliente%' ORDER BY o.dias_mora DESC; ";
             //CHARINDEX('$id_cliente',o.identificacion) > 0 ;";
             //             d.identificacion = '$id_cliente';";
@@ -19,8 +20,8 @@ class ModelMaster extends Model
             $res = (count($resQuery) >= 0) ? $resQuery : 0;
             return $res;
         } catch (\Exception $e) {
-            //throw $th;
-            return 0;
+            error_log("Error en GestionNueva: " . $e->getMessage());
+            die($e->getMessage());
             //die('ERROR DE CAMPOS: '.$e->getMessage());
         }
     }
@@ -29,7 +30,7 @@ class ModelMaster extends Model
     {
         try {
             // $sql = "SELECT *  FROM public.obligacionespublic as o
-            $sql = "SELECT *  FROM rst_banco_agrario_lp_schema.obligaciones as o
+            $sql = "SELECT *  FROM fnalanding.obligaciones as o
             WHERE o.identificacion LIKE '%$id_cliente%' ORDER BY o.dias_mora DESC; ";
             //CHARINDEX('$id_cliente',o.identificacion) > 0 ;";
             //             d.identificacion = '$id_cliente';";

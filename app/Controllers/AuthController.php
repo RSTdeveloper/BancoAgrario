@@ -46,7 +46,7 @@ class AuthController extends BaseController
     public function ValidarObligacion()
     {
         $obligacion = $this->request->getGet('obligacion');
-        $data4 = $this->modelAutenticacion->getDeudorGestion($obligacion,'rst_banco_agrario_lp_schema');
+        $data4 = $this->modelAutenticacion->getDeudorGestion($obligacion,'fnalanding');
         $resdata = ($data4 > 0) ? array('type' => 'success', 'message' => $data4) : array('type' => 'error', 'message' => 'No hay Gestion.');
         echo json_encode($resdata);
     }
@@ -75,7 +75,7 @@ class AuthController extends BaseController
         $username = $this->request->getPost('username');
 
         $username = strtoupper($username);
-        $schema = 'rst_banco_agrario_lp_schema';
+        $schema = 'fnalanding';
         $data1 = $this->modelAutenticacion->getDeudorID($identificacion);
         $data2 = $this->modelAutenticacion->getDeudorCodigo($username);
         

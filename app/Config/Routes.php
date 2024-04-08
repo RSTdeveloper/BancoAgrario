@@ -46,7 +46,6 @@ $routes->get('/consultarobligacionescliente', 'DataController::ReadCallCenterCon
 $routes->get('/consultarobligaciones', 'DataController::ReadCallCenterConsultarObligaciones');
 
 
-
 //funciones para traer contenidos de selectores 
 $routes->get('/listartronco', 'DataController::ReadCallCenterTronco');
 $routes->get('/listarrama', 'DataController::ReadCallCenterRama');

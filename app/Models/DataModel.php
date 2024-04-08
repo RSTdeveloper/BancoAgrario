@@ -104,8 +104,8 @@ class DataModel extends Model
             return $res;
         } catch (\Exception $e) {
             //throw $th;
-            return 0;
-            //die($e->getMessage());
+            // return 0;
+            die($e->getMessage());
         }
     }
     public function ReadIdCallCenterRelacionTipificacion($schema, $cod_tipificacion)
@@ -149,30 +149,27 @@ class DataModel extends Model
         } catch(\Exception $e){
             //throw $th;
             //return 0;
+            // error_log("Error en GestionNueva: " . $e->getMessage());
             die($e->getMessage());
         }
     }
-    public function GestionNueva($schema,$obligacion, $sel, $observacion, $acuerdo_pago,$contacto, $autorizacioncanales)
+    // Este lo hicimos
+    public function GestionNueva($squema, $obligacion, $sel, $observacion, $acuerdo_pago,$contacto,$autorizacioncanales)
     {
         try{
-            $sql = "INSERT INTO  $schema.gestion_clientes (obligacion, nopago, observaciones, acuerdo_pago, contacto, autorizacioncanales) 
-            VALUES(:obligacion:, :nopago:, :observaciones:, :acuerdo_pago:, :contacto:, :autorizacioncanales:);";
-            $query = $this->db->query($sql, [
-                'obligacion' => $obligacion,
-                'nopago' => $sel,
-                'observaciones' => $observacion,
-                'acuerdo_pago' => $acuerdo_pago,
-                'contacto' => $contacto,
-                'autorizacioncanales' => $autorizacioncanales,
-            ]);
+            $sql = "INSERT INTO  fnalanding.gestion_clientes (obligacion, nopago, observaciones, acuerdo_pago, contacto, autorizacioncanales) 
+            VALUES('$obligacion','$sel','$observacion','$acuerdo_pago','$contacto', '$autorizacioncanales')";
+            $query = $this->db->query($sql);
             $resQuery = $this->db->affectedRows();
+            // $resQuery = $query->getResultArray();
             $res = ($resQuery > 0) ? $resQuery : 0;
             return $res;
         }
         catch (\Exception $e) {
-            //throw $th;
-            //die($e->getMessage());
+            // throw $th;
+            // die($e->getMessage());
             return 0;
         }
+            
     }
 }

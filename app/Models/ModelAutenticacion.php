@@ -16,7 +16,7 @@ class ModelAutenticacion extends Model
         try {
             $sql = "SELECT identificacion, nombres
             -- FROM public.deudorespublic
-            FROM rst_banco_agrario_lp_schema.deudores
+            FROM fnalanding.deudores
             WHERE identificacion LIKE '%$userDoc%' AND codigo = /*LIKE '%" . $this->db->escapeLikeString($username) . "%' ESCAPE '!'*/ $username ;";
             $query = $this->db->query($sql);
             $resQuery = $query->getRow();
@@ -33,7 +33,7 @@ class ModelAutenticacion extends Model
         try {
             $sql = "SELECT obligacion
             -- FROM public.obligacionespublic
-            FROM rst_banco_agrario_lp_schema.obligaciones
+            FROM fnalanding.obligaciones
             WHERE identificacion LIKE '%$userDoc%';";
             $query = $this->db->query($sql);
             $resQuery = $query->getRow();
@@ -45,6 +45,9 @@ class ModelAutenticacion extends Model
             //die($e->getMessage());
         }
     }
+
+    // ------------------------------------------------------------------------------------------------
+
 
     public function getDeudorGestion($obligacion,$schema)
     {        
@@ -67,7 +70,7 @@ class ModelAutenticacion extends Model
         try {
             $sql = "SELECT identificacion
             -- FROM public.deudorespublic
-            FROM rst_banco_agrario_lp_schema.deudores
+            FROM fnalanding.deudores
             WHERE identificacion LIKE '%$userDoc%';";
             $query = $this->db->query($sql);
             $resQuery = $query->getRow();
@@ -85,7 +88,7 @@ class ModelAutenticacion extends Model
         try {
             $sql = "SELECT codigo
             -- FROM public.deudorespublic
-            FROM rst_banco_agrario_lp_schema.deudores
+            FROM fnalanding.deudores
             WHERE codigo = $username;";
             $query = $this->db->query($sql);
             $resQuery = $query->getRow();

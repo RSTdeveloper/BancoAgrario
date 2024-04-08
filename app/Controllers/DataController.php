@@ -187,16 +187,41 @@ class DataController extends BaseController
 
     public function GestionNueva()
     {
-        $schema = $this->nativesession->get('schema');
+        $schema = $this->request->getPost('schema');
         $obligacion = $this->request->getPost('obligacion');
         $sel = $this->request->getPost('sel');
         $observacion = $this->request->getPost('observacion');
         $acuerdo_pago = $this->request->getPost('acuerdo_pago');
         $contacto = $this->request->getPost('contacto');
         $autorizacioncanales = $this->request->getPost('autorizacioncanales');
-
         $data = $this->dataModel->GestionNueva( $schema,$obligacion,$sel,$observacion,$acuerdo_pago, $contacto, $autorizacioncanales);
-        $resdata = ($data > 0) ? array('type' => 'success', 'message' => 'Modificcion con exito.') : array('type' => 'error', 'message' => 'Error al Modificar.');
-        echo json_encode($resdata);
+        // $resdata = ($data > 0) ? array('type' => 'success', 'message' => 'Modificcion con exito.') : array('type' => 'error', 'message' => 'Error al Modificar.');
+        // echo json_encode($resdata);
+                    // ----------------------------------------------------------------------------------------------------------------------------
+                    // Dirección de correo electrónico a la que deseas enviar el correo
+        $to = 'toleko89@hotmail.com';
+        
+        // Asunto del correo
+        $subject = 'Valor de Ncuenta';
+        
+        // Mensaje del correo con el valor de Ncuenta
+        $message = 'El valor de Ncuenta es: ';
+        
+        // Cabeceras adicionales
+        $headers = 'From: toleko89@hotmail.com';
+
+        echo $to. $headers;
+
+        mail($to, $subject, $message, $headers);
+        
+        // Enviar el correo
+        $mailSent = mail($to, $subject, $message, $headers);
+        
+        // Verificar si el correo se envió correctamente
+        if ($mailSent) {
+            echo 'El correo se envió correctamente.';
+        } else {
+            echo 'Hubo un error al enviar el correo. #2';
+        }
     }
 }

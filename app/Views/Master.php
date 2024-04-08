@@ -53,6 +53,7 @@
 
     <!-- Axios -->
     <script src="https://unpkg.com/axios@0.23.0/dist/axios.min.js"></script>
+    
 
     <!-- Mommentjs -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -111,13 +112,15 @@
         <!-- Navbar -->
         <nav class="navbar navbar-white navbar-light">
         
-        <img class="animation__shake img-icon"  src="<?= base_url(); ?>/assets/dist/img/BANCO_H_RST.png" alt="AdminLTELogo" >
+        <img class="animation__shake img-icon"  src="<?= base_url(); ?>/assets/dist/img/fna.jpg" alt="AdminLTELogo" >
 
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto" >
                 <!-- Notifications Dropdown Menu -->
                 <li class="nav-item" >
-                    <a class="nav-link active" style="font-size: larger;" href="<?= base_url(); ?>/logout" role="button" onclick="gestionClientes('Abandona',null)">
+                    <!-- <a class="nav-link active" style="font-size: larger;" href="<?= base_url(); ?>/logout" role="button" onclick="gestionClientes('Abandona',null)"> -->
+                    <a class="nav-link active" style="font-size: larger;" href="<?= base_url(); ?>/logout" role="button">
+    
                         <i class="fas fa-sign-out-alt" ></i>
                         Salida Segura
                     </a>
@@ -208,7 +211,6 @@
 
         async function ValidarSesion() {
             let dataValSesion = await axios.get("<?= base_url(); ?>/validarsesion");
-            //console.log(dataValSesion);
             let estado = dataValSesion.data;
             
 
@@ -225,15 +227,15 @@
         });
 
         $(window).blur(function() {
-            console.log("oculto");
+            // console.log("oculto");
             setTimeout(function(){
-                gestionClientes('Abandona',null); 
+                // gestionClientes('Abandona',null); 
                 window.location.href = '<?= base_url(); ?>/logout';
-            }, 600000);
+            }, 120000);
         });
         $(window).focus(function() {
             ValidarSesion();
-            console.log("en foco");
+            // console.log("en foco");
         });
         ConsultarCliente();
         let intervaloID = 0;
@@ -256,7 +258,6 @@
         });
 
         $(window).blur(function() {
-            //console.log("oculto");
         });
         $(window).focus(function() {
         });
@@ -264,10 +265,10 @@
         async function ConsultarCliente() {
             
 
-            console.log(tronco);
+            // console.log("tronco",tronco);
             
             let nombres = '<?= $_SESSION['Nombres']; ?>';
-            console.log(nombres);
+            // console.log("nombres",nombres);
             var today = new Date();
             var tdd = today.getDate();
             var tmm = today.getMonth() + 1;
@@ -312,8 +313,8 @@
             obligacionData = dataObligaciones_source;
 
             let dataObligaciones = Obligaciones.data
-            console.log(dataObligaciones_source);
-            console.log(dataObligaciones);
+            // console.log(dataObligaciones_source);
+            // console.log("dataObligaciones=",dataObligaciones);
             //-----------------------------------------------------------------------------------------------------------------------------
 
             if (dataObligaciones.type == 'error') {
@@ -326,7 +327,22 @@
                 //let string = dataObligaciones.message[0].banca
                 let substring = "ADMINISTRA"
 
-                let valor_proxima_cuota = formatter.format(dataObligaciones.message[0].valor_proxima_cuota)
+
+                //*************Toma el valor String=valor_proxima_cuota y lo combierte en un decimal y lo redondea en un entero.
+                valor_proxima_cuota = dataObligaciones.message[0].valor_proxima_cuota;
+                //--------------------------------------------------------
+                valor_proxima_cuota_String = parseFloat(valor_proxima_cuota.replace(',', '.'));
+                //--------------------------------------------------------
+                numero_redondeado_valor_proxima_cuota =  Math.ceil(valor_proxima_cuota_String).toLocaleString();
+                //************************************************************************************************
+                
+
+                if (typeof valor_proxima_cuota === 'number' && !isNaN(valor_proxima_cuota)) {
+                    valor_proxima_cuota = formatter.format(valor_proxima_cuota);
+                } else {
+                    // console.error("El valor de la próxima cuota no es un número válido:", valor_proxima_cuota);
+                }
+
 
                 let content_juridico = `<div class="row">
                           <div class="form-group col-md">                             
@@ -348,20 +364,52 @@
                     }
                 }
                 let n=0;
+                bancada =dataObligaciones.message[0].banca;
+                // console.log("bancada",bancada);
+                if( bancada=="TARJETA DE CREDITO"){
+                    textBancada = "tarjeta de crédito";
+                }else{
+                    textBancada = "obligación"; 
+                }
 
                 if (dataObligaciones.message.length == 1){
                     
-                    $('#nro_obligaciones').html(`A continuación podrá ver el estado de su obligación, seleccione para mas información:`);
+                    $('#nro_obligaciones').html(`A continuación podrá ver el estado de su ${textBancada}, seleccione para mas información:`);
                     // $('#nro_obligaciones').html(`Usted presenta ${dataObligaciones.message.length} obligación pendiente, seleccione para consultar:`);
                 }else{
                     $('#nro_obligaciones').html(`Usted presenta ${dataObligaciones.message.length} obligaciónes pendientes, seleccione para consultar:`);
                 }
                 n=n+1;
-                saldooo= parseInt(dataObligaciones.message[0].saldo_total)
-                saldo_to =saldooo.toLocaleString();
+                saldo_to= dataObligaciones.message[0].saldo_total;
+                saldo_to_String = parseFloat(saldo_to.replace(',', '.'));
+                saldo_redondeado_total =  Math.ceil(saldo_to_String).toLocaleString();
 
+
+                // saldo_to =saldooo.toLocaleString();
+
+                //------------------------------------------------
                 Ncuenta= String(dataObligaciones.message[0].obligacion)
-                cuenta = "*********" + Ncuenta.slice(10);
+
+                // Obtener los últimos cuatro dígitos
+                ultimosCuatroDigitos = Ncuenta.slice(-4);
+
+
+                // console.log("NCUENTA=", ultimosCuatroDigitos);
+
+                numCaracteresOcultos = Ncuenta.length - 4;
+                // console.log("numCaracteresOcultos=", numCaracteresOcultos);
+
+                asteriscos = '*'.repeat(numCaracteresOcultos);
+                // console.log("asteriscos=", asteriscos);
+
+                Cuentaresultado = asteriscos + Ncuenta.substring(numCaracteresOcultos);
+                // console.log("resultado=", Cuentaresultado);
+                //-----------------------------------------------
+                //-----------------------prueba correo------------------------
+                
+                
+                //-----------------------------------------------
+
 
                         let content = `
                         <div class="containerr">
@@ -369,7 +417,7 @@
                                 <div class="block-source">
                                     <span class="name-data">OBLIGACIÓN: </span>
                                     <div  class="result-data">
-                                        <p style="height: 50%;">${cuenta}</p>
+                                        <p style="height: 50%;">${Cuentaresultado}</p>
                                     </div>
                                 </div>
                             </div>
@@ -387,7 +435,7 @@
                                 <div class="block-source">
                                     <span class="name-data">SALDO TOTAL APROX.: </span>
                                     <div  class="result-data">
-                                        <p style="height: 50%;">$ ${saldo_to}</p>
+                                        <p style="height: 50%;">$ ${saldo_redondeado_total}</p>
                                     </div>
                                 </div>
                             </div> 
@@ -396,7 +444,7 @@
                                 <div class="block-source">
                                     <span class="name-data">VALOR A PAGAR APROX.: </span>
                                     <div  class="result-data">
-                                        <p style="height: 50%;">${valor_proxima_cuota}</p>
+                                        <p style="height: 50%;">$ ${numero_redondeado_valor_proxima_cuota}</p>
                                     </div>
                                 </div>
                             </div>
@@ -427,15 +475,15 @@
 
 
 
-                    console.log("------------------------------------------------")  ;
-                    console.log("P10 =",dd );
+                    // console.log("------------------------------------------------")  ;
+                    // console.log("P10 =",dd );
                     let nuevaCadena = "*****" + dd.slice(5);
-                    console.log("P11 =",dataObligaciones.message[0]['obligacion'] );
+                    // console.log("P11 =",dataObligaciones.message[0]['obligacion'] );
 
                     nuevoNumero = dataObligaciones.message[0]['obligacion'];
 
                     numeroSifrado = "*****" + dataObligaciones.message[0].replace;
-                    console.log("P12 =",nuevaCadena)  ;
+                    // console.log("P12 =",nuevaCadena)  ;
 
 
 
@@ -462,14 +510,14 @@
                 
                 var radios = document.getElementsByName('optradio');
                 $.each(radios, async function(i, v) { 
-                    console.log("Prueba1=",v.value)  
+                    // console.log("Prueba1=",v.value)  
                     let validarObl = await axios.get("<?= base_url(); ?>/validarobligacion", {
                         params: {
                             obligacion: v.value
                         }
                     });
                     validarObl = validarObl.data;
-                    console.log(validarObl)
+                    // console.log(validarObl)
                     if(validarObl.type=='success') {$(`#data${i}`).attr('disabled','disabled');}         
                     $(`#data${i}`).on('click', function(event) {
                         diasMora(dataObligaciones_source, dataObligaciones);
@@ -490,13 +538,26 @@
             let botonSelected = $("input[name='optradio']:checked").data('key');
             let obligacionInfo = obligacion_cliente.message[botonSelected];
             let obligacionData = obligacion_source.message[botonSelected];
-            console.log(obligacion_source);
-            console.log(obligacion_cliente);
             var dd = obligacionData.obligacion;
             var replaced = dd.replace(/.(?=.{5,}$)/g, '');
-            valor_cuota = formatter.format(obligacionData.valor_proxima_cuota);
+
+            valor_cuota = obligacionData.valor_proxima_cuota;
+            valor_cuota_String = parseFloat(valor_cuota.replace(',', '.'));
+            valor_cuota_proxima_cuota =  Math.ceil(valor_cuota_String).toLocaleString();
+            banca =obligacionData.banca;
+
+            // console.log("banca",banca);
+            // console.log("valor_cuota",valor_cuota_proxima_cuota);
+
+            if( banca=="TARJETA DE CREDITO"){
+                textBanca = "su tarjeta de crédito"
+            }else{
+                textBanca = " cuenta de crédito terminado en " + ultimosCuatroDigitos; 
+            }
+
+
             let contModal='';
-            contModal  += `<div class="modal-header" style="background-color:#424949 ; color:#FDFEFE">
+            contModal  += `<div class="modal-header" style="color:#FDFEFE">
                     <h5 class="modal-title" id="contentModalLabel">Gestión de Obligación</h5>
                         
                 </div>
@@ -521,7 +582,8 @@
                     
                     }else{
                     contModal += `<br> 
-                        <h4 class="w-100 text-center" id="lblPago" name="lblPago" >Le informamos que se encuentra disponible el estado de cuenta del credito terminado en ${replaced} por un valor aproximado de ${valor_cuota} con fecha para el dia ${obligacionData.fecha_pago} ¿Tiene algo que manifestar?</h4>
+                        <h4 class="w-100 text-center" id="lblPago" name="lblPago" >Le informamos que se encuentra disponible el estado de ${textBanca}, con un valor aproximado de $ ${valor_cuota_proxima_cuota} con fecha para el día ${obligacionData.fecha_pago} ¿Tiene algo que manifestar?</h4>
+
                         <br>
                         <div class="text-center">
                         <button type="button" style="background-color:#Green; " id="si1_Btn" value="btnactualizar" class="btn btn-success mb-4 " >Si</button>
@@ -575,10 +637,10 @@
             let botonSelected = $("input[name='optradio']:checked").data('key');
             let obligacionInfo = obligacion_cliente.message[botonSelected];
             let obligacionData = obligacion_source.message[botonSelected];
-            console.log(selDiasMora);
+            // console.log(selDiasMora);
 
             let contModal = '';
-             contModal += `<div class="modal-header" style="background-color:#424949 ; color:#FDFEFE">
+             contModal += `<div class="modal-header" style="color:#FDFEFE">
                     <h5 class="modal-title" id="contentModalLabel">Gestión de Obligación</h5>
                 </div>
                 <div class="modal-body">
@@ -595,6 +657,9 @@
                                 <p style="text-align:center; width: 100%;">Un asesor nuestro se pondrá en contacto.</p>
                             </div>
                         </div>
+                        <div  style="text-align:center; width: 100%;">
+                                <input type="checkbox" id="checkbox" name="checkbox" checked> - Autorizo confirmación de pago por otros canales.
+                            </div>
                         <hr>
                     </div>
                     </form>
@@ -644,35 +709,73 @@
                 const year = fecha.getFullYear();
 
                 // Imprimir las fechas
-                console.log('Fecha actual:', fechaActual.toISOString());
-                console.log(`Fecha después de sumar ${diasASumar} días:`, nuevaFecha.toISOString(),);
-                console.log('Fecha ISO:', fechaISO);
-                console.log('Fecha ISO:', day, mount, year);
+                // console.log('Fecha actual:', fechaActual.toISOString());
+                // console.log(`Fecha después de sumar ${diasASumar} días:`, nuevaFecha.toISOString(),);
+                // console.log('Fecha ISO:', fechaISO);
+                // console.log('Fecha ISO:', day, mount, year);
             //-----------------------------------------------------------------------------------------------------------
-
+            // Función para verificar si una fecha es un día festivo en Colombia
             if (obligacionData.dias_mora > 0) {
-                // Obtener la fecha actual
-                const fechaActual = new Date();
+                function esFestivoColombia(fecha) {
+                    // Lista de días festivos en Colombia (puedes agregar más según tu necesidad)
+                    const festivosColombia = [
+                        '01/01', // Año Nuevo
+                        '08/01', // Día de los Reyes Magos
+                        '25/03', // Día del Trabajo
+                        '28/03', // Jueves Santo.
+                        '29/03', // Viernes Santo.
+                        '01/05', // Día del Trabajo
+                        '13/05', // Día de la Ascensión.
+                        '03/06', // Corpus Christi.
+                        '10/06', // Día del Sagrado Corazón.
+                        '01/07', // Día de San Pedro y San Pablo.
+                        '20/07', // Día de la Independencia de Colombia
+                        '07/08', // Batalla de Boyacá
+                        '19/08', // Asunción de la Virgen
+                        '14/10', // Día de la Raza
+                        '04/11', // Todos los Santos
+                        '11/11', // Independencia de Cartagena
+                        '08/12', // Día de la Inmaculada Concepción
+                        '25/12',  // Navidad
+                    ];
 
-                // Sumarle 3 días a la fecha actual excluyendo sábados y domingos
-                const diasASumar = 3;
-                let nuevaFecha = new Date(fechaActual);
+                    // Formatear la fecha dada como DD/MM
+                    const dia = fecha.getDate();
+                    const mes = fecha.getMonth() + 1;
+                    const fechaFormateada = `${dia < 10 ? '0' + dia : dia}/${mes < 10 ? '0' + mes : mes}`;
 
-                for (let i = 0; i < diasASumar;) {
-                    nuevaFecha.setDate(nuevaFecha.getDate() + 1);
-
-                    // Verificar si el día de la semana no es sábado (6) ni domingo (0)
-                    if (nuevaFecha.getDay() !== 6 && nuevaFecha.getDay() !== 0) {
-                        i++;
-                    }
+                    // Verificar si la fecha formateada está en la lista de festivos de Colombia
+                    return festivosColombia.includes(fechaFormateada);
                 }
 
+                // Función para calcular la fecha de acuerdo excluyendo sábados, domingos y festivos en Colombia
+                function calcularFechaAcuerdo(diasASumar) {
+                    // Obtener la fecha actual
+                    const fechaActual = new Date();
+                    let nuevaFecha = new Date(fechaActual);
+
+                    for (let i = 0; i < diasASumar;) {
+                        // Aumentar un día a la fecha actual
+                        nuevaFecha.setDate(nuevaFecha.getDate() + 1);
+
+                        // Verificar si el día de la semana no es sábado (6), domingo (0) y no es festivo en Colombia
+                        if (nuevaFecha.getDay() !== 6 && nuevaFecha.getDay() !== 0 && !esFestivoColombia(nuevaFecha)) {
+                            i++;
+                        }
+                    }
+
+                    return nuevaFecha;
+                }
+
+                // Llamada a la función para calcular la fecha de acuerdo excluyendo sábados, domingos y festivos en Colombia
+                const diasASumar = 3; // Cantidad de días a sumar
+                const nuevaFecha = calcularFechaAcuerdo(diasASumar);
                 const tdd = nuevaFecha.getDate();
                 const tmm = nuevaFecha.getMonth() + 1;
                 const tyyyy = nuevaFecha.getFullYear();
-                dateAgreement = tdd + '/' + tmm + '/' + tyyyy;
-
-                contModal += `<div class="modal-header" style="background-color:#424949 ; color:#FDFEFE">
+                var dateAgreement = `${tdd}/${tmm}/${tyyyy}`; // Formato de fecha
+//-----------------------------------------------
+                contModal += `<div class="modal-header" style="color:#FDFEFE">
                     <h5 class="modal-title" id="contentModalLabel">Gestión de Obligación</h5>
                     
                 </div>
@@ -682,7 +785,7 @@
                             <div class="col-md-12 col-lg-12" id="divSelHojaTip">
                                 <div class="form-group w-100 text-center">
                                     <h3 >Hecho !</h3> 
-                                    <p>Recuerde que su compromiso de pago se encuentra para la fecha ${dateAgreement} por un valor aproximado de: ${valor_cuota}. Cuando realice el pago, por favor valide el valor.</p>
+                                    <p id ="cualquiera">Recuerdee que su compromiso de pago se encuentra para la fecha ${dateAgreement} por un valor aproximado de $ ${valor_cuota_proxima_cuota}. Cuando realice el pago, por favor valide el valor.</p>
                                 </div>
                             </div>
                             <div class="col-md-12 col-lg-12">
@@ -693,14 +796,14 @@
                                 </div>
                             </div>
                             <div  style="text-align:center; width: 100%;">
-                            <input name="#" type="checkbox" checked /> - Autorizo confirmación de pago por otros canales.
+                                <input type="checkbox" id="checkbox" name="checkbox" checked> - Autorizo confirmación de pago por otros canales.
                             </div>
                         <hr>
                         </div>
                     </form>
                 </div>`
             }else{
-                contModal += `<div class="modal-header" style="background-color:#424949 ; color:#FDFEFE">
+                contModal += `<div class="modal-header" style="color:#FDFEFE">
                     <h5 class="modal-title" id="contentModalLabel">Gestión de Obligación</h5>
                     
                 </div>
@@ -710,11 +813,14 @@
                             <div class="col-md-12 col-lg-12" id="divSelHojaTip">
                                 <div class="form-group w-100 text-center">
                                     <h3 >Hecho !</h3> 
-                                    <p>Recuerde que su compromiso de pago se encuentra para la fecha ${obligacionData.fecha_pago} por un valor aproximado de: ${valor_cuota}. Cuando realice el pago, por favor valide el valor.</p>
+                                    <p id ="cualquiera">Recuerde que su compromiso de pago se encuentra para la fecha ${obligacionData.fecha_pago} por un valor aproximado de $ ${valor_cuota_proxima_cuota}. Cuando realice el pago, por favor valide el valor.</p>
                                 </div>
                             </div>
                           
                         <hr>
+                        <div  style="text-align:center; width: 100%;">
+                                <input type="checkbox" id="checkbox" name="checkbox" checked> - Autorizo confirmación de pago por otros canales.
+                            </div>
                         </div>
                     </form>
                 </div>`
@@ -750,9 +856,9 @@
             $('#btnGuardar').attr('disabled','disabled')
         });
 
-        $('#btnGuardar1').on('click', function(event) {
-            $('#btnGuardar1').attr('disabled','disabled')
-        });
+        // $('#btnGuardar1').on('click', function(event) {
+        //     $('#btnGuardar1').attr('disabled','disabled')
+        // });
 
         let n=1;
         async function gestionClientes(acuerdo_pago,selDiasMora){
@@ -779,7 +885,7 @@
                 }
             });
             validarObl = validarObl.data;
-            console.log(validarObl)
+            // console.log(validarObl)
             if(validarObl.type=='success') {
                 Swal.fire(
                     'Error!',
@@ -788,22 +894,100 @@
 				);
                 return 0;
             }        
+
             let observacion = $("#observacion").val() || null;
             let selNoPago = $('#selNoPago').val() || null;
             let contacto = $('#contacto').val() || null;
             let autorizacioncanales = $('#autorizacioncanales').val() || null;
-
-            console.log('acuerdo_pago 1=', acuerdo_pago);
-            if(acuerdo_pago=='Si'){
-                    autorizacioncanales = "Autoriza";
-                }
-                else{
-                    autorizacioncanales = "No Autoriza";           
-                }
             
-           
+//-----------------------------------------------------------------------------------------------------------
+                // Obtener la fecha actual
+                const fechaActual = new Date();
 
-            console.log(contacto);
+                // Sumarle 3 días a la fecha actual
+                const diasASumar = 3;
+                const nuevaFecha = new Date(fechaActual);
+                nuevaFecha.setDate(fechaActual.getDate() + diasASumar);
+
+                const fechaISO = nuevaFecha.toISOString();
+                const fecha = new Date(fechaISO)
+                const day = fecha.getDate();
+                const mount = fecha.getMonth()+1;
+                const year = fecha.getFullYear();
+
+            //-----------------------------------------------------------------------------------------------------------
+            // Función para verificar si una fecha es un día festivo en Colombia
+            if (obligacionData.dias_mora > 0) {
+                function esFestivoColombia(fecha) {
+                    // Lista de días festivos en Colombia (puedes agregar más según tu necesidad)
+                    const festivosColombia = [
+                        '01/01', // Año Nuevo
+                        '08/01', // Día de los Reyes Magos
+                        '25/03', // Día del Trabajo
+                        '28/03', // Jueves Santo.
+                        '29/03', // Viernes Santo.
+                        '01/05', // Día del Trabajo
+                        '13/05', // Día de la Ascensión.
+                        '03/06', // Corpus Christi.
+                        '10/06', // Día del Sagrado Corazón.
+                        '01/07', // Día de San Pedro y San Pablo.
+                        '20/07', // Día de la Independencia de Colombia
+                        '07/08', // Batalla de Boyacá
+                        '19/08', // Asunción de la Virgen
+                        '14/10', // Día de la Raza
+                        '04/11', // Todos los Santos
+                        '11/11', // Independencia de Cartagena
+                        '08/12', // Día de la Inmaculada Concepción
+                        '25/12',  // Navidad
+                    ];
+
+                    // Formatear la fecha dada como DD/MM
+                    const dia = fecha.getDate();
+                    const mes = fecha.getMonth() + 1;
+                    const fechaFormateada = `${dia < 10 ? '0' + dia : dia}/${mes < 10 ? '0' + mes : mes}`;
+
+                    // Verificar si la fecha formateada está en la lista de festivos de Colombia
+                    return festivosColombia.includes(fechaFormateada);
+                }
+
+                // Función para calcular la fecha de acuerdo excluyendo sábados, domingos y festivos en Colombia
+                function calcularFechaAcuerdo(diasASumar) {
+                    // Obtener la fecha actual
+                    const fechaActual = new Date();
+                    let nuevaFecha = new Date(fechaActual);
+
+                    for (let i = 0; i < diasASumar;) {
+                        // Aumentar un día a la fecha actual
+                        nuevaFecha.setDate(nuevaFecha.getDate() + 1);
+
+                        // Verificar si el día de la semana no es sábado (6), domingo (0) y no es festivo en Colombia
+                        if (nuevaFecha.getDay() !== 6 && nuevaFecha.getDay() !== 0 && !esFestivoColombia(nuevaFecha)) {
+                            i++;
+                        }
+                    }
+
+                    return nuevaFecha;
+                }
+
+                // Llamada a la función para calcular la fecha de acuerdo excluyendo sábados, domingos y festivos en Colombia
+                const diasASumar = 3; // Cantidad de días a sumar
+                const nuevaFecha = calcularFechaAcuerdo(diasASumar);
+                const tdd = nuevaFecha.getDate();
+                const tmm = nuevaFecha.getMonth() + 1;
+                const tyyyy = nuevaFecha.getFullYear();
+                var dateAgreement = `${tdd}/${tmm}/${tyyyy}`;
+            }
+            // //------------------------------------------------------------------------
+            
+            var checkbox = document.getElementById("checkbox");
+            var resultado = document.getElementById("resultado");
+            if (checkbox.checked) {
+                // console.log("FECHA = ", dateAgreement)
+                autorizacioncanales = "Autoriza"
+                // Aquí podrías agregar código adicional para guardar la información.
+
+                let elemento = "Recuerde que su compromiso de pago se encuentra para la fecha "+ dateAgreement + " por un valor aproximado de: " + valor_cuota_proxima_cuota + " Cuando realice el pago, por favor valide el valor.";
+
             let sel = '';
             if(selDiasMora == null){
                 sel = selNoPago;
@@ -811,42 +995,60 @@
                 sel = selDiasMora;
             }
             const params = new URLSearchParams();
-                params.append('obligacion', obligacion);
-                params.append('sel', sel);
+            params.append('obligacion', obligacion);
+            params.append('sel', sel);
+            if (acuerdo_pago== "Si"){
+                params.append('observacion', elemento + " // " + observacion);
+            }
+            else{
                 params.append('observacion', observacion);
-                params.append('acuerdo_pago', acuerdo_pago);
-                params.append('contacto', contacto);
-                params.append('autorizacioncanales', autorizacioncanales);
-                
-                let gestion = await axios.post("<?= base_url(); ?>/gestionnueva", params);
+            }
+            params.append('acuerdo_pago', acuerdo_pago);
+            params.append('contacto', contacto);
+            params.append('autorizacioncanales', autorizacioncanales);
+            let gestion = await axios.post("<?= base_url(); ?>/gestionnueva", params);
 
-                if(gestion.type == 'error'){
-                    console.log('Fallido');
-                }else{
-                    console.log('Exito');
-                    console.log(dataObligaciones_source.message.length);                   
-                }
-                 if(n == dataObligaciones_source.message.length ){
-                    $('#si_Btn').attr('disabled','disabled');
-                    $('#no_Btn').attr('disabled','disabled');
-                    $('#nro_obligaciones').html(`Ha gestionado ${n} de ${dataObligaciones_source.message.length} obligaciones`);
-                    $('#lblPago').html(``);
-                    $('#lblPago').html(`Ha gestionado con éxito todos sus productos`);
-                    gracias(acuerdo_pago);
-                }else{
-                    $('#nro_obligaciones').html(`Ha gestionado ${n} de ${dataObligaciones_source.message.length} obligaciones`);
-                        n=n+1;
-                    $('#modalContentGeneral').modal('hide');}                           
+            // const elemento = obligacionData.fecha_pago;
+
+            // console.log("BANDERA-1=", elemento);
+
+
+            if(n == dataObligaciones_source.message.length ){
+                $('#si_Btn').attr('disabled','disabled');
+                $('#no_Btn').attr('disabled','disabled');
+                $('#nro_obligaciones').html(`Ha gestionado ${n} de ${dataObligaciones_source.message.length} obligaciones`);
+                $('#lblPago').html(``);
+                $('#lblPago').html(`Ha gestionado con éxito todos sus productos`);
+                gracias(acuerdo_pago);
+            }else{
+                $('#nro_obligaciones').html(`Ha gestionado ${n} de ${dataObligaciones_source.message.length} obligaciones`);
+                    n=n+1;
+                $('#modalContentGeneral').modal('hide');}    
+
             $("input[name='optradio']:checked").attr('disabled','disabled');   
 
+                //--------------------------------------------------------
                 
+            } else {
+                autorizacioncanales = " No Autoriza"
+                // document.getElementById("botonEnviar").disabled = false;
+                // Aquí podrías agregar código adicional si necesitas manejar el caso en el que no está seleccionado.
+                alert("Por favor, Seleccione la autorización para poder continuar.");
+                // window.alert("Bienvenido a nuestro sitio web");
+                // window.open("https://javascript.info");
+                // prompt("Informacion", ["Por favor, Seleccione la autorización para poder continuar."]);
+                
+            }   
         }
+            
+            // //------------------------------------------------------------------------
+
 
         function gracias(acuerdo){
-            console.log('entro');
+            // console.log('entro');
             let contModal = '';
             if(acuerdo == 'Si'){
-                contModal += `<div class="modal-header" style="background-color:#424949 ; color:#FDFEFE">
+                contModal += `<div class="modal-header" style="color:#FDFEFE">
                     <h5 class="modal-title" id="contentModalLabel"></h5>
                     
                 </div>
@@ -855,10 +1057,10 @@
                         <div class="row">
                             <div class="col-md-12 col-lg-12" id="divSelHojaTip">
                                 <div class="form-group w-100 text-center">
-                                    <h3>Información guardada con Exito !</h3> 
+                                    <h3>Información guardada con éxito!</h3> 
                                     <hr>
                                     <div class="image">
-                                        <img src="<?= base_url(); ?>/assets/dist/img/BANCO_V_RST.png" style="width:15rem; height:9rem;"  alt="User Image">
+                                        <img src="<?= base_url(); ?>/assets/dist/img/logo-fna.png" style="width:13rem; height:13rem;"  alt="User Image">
                                     </div>
                                     <hr>
                                 </div>
@@ -867,7 +1069,7 @@
                         </div>
                     </form>
                 </div>`}else{
-                    contModal += `<div class="modal-header" style="background-color:#424949 ; color:#FDFEFE">
+                    contModal += `<div class="modal-header" style="color:#FDFEFE">
                     <h5 class="modal-title" id="contentModalLabel"></h5>
                     
                 </div>
@@ -876,10 +1078,10 @@
                         <div class="row">
                             <div class="col-md-12 col-lg-12" id="divSelHojaTip">
                                 <div class="form-group w-100 text-center">
-                                    <h3 >Información guardada con éxito !</h3> 
+                                    <h3 >Información guardada con éxito!</h3> 
                                     <hr>
                                     <div class="image">
-                                        <img src="<?= base_url(); ?>/assets/dist/img/BANCO_V_RST.png" style="width:15rem; height:9rem;"  alt="User Image">
+                                        <img src="<?= base_url(); ?>/assets/dist/img/logo-fna.png" style="width:13rem; height:13rem;"  alt="User Image">
                                     </div>
                                     <hr>
                                 </div>
@@ -890,16 +1092,32 @@
                 </div>`
                 }
             
-                contModal +=`<div class="modal-footer">
-                    
-                    <button type="button" class="btn btn-primary" onclick="CerrarSesion()" style="background-color:#FB8C00;"><span id="loaderGestion" >Salir</span></button>
-                </div>`;
+                contModal +=`
+                <div class="modal-boton-end">
+                    <button type="button" class="btn btn-primary-green" onclick=""><span id="factura" >Factura</span></button>
+                    <button type="button" class="btn btn-primary-blue" onclick=""><span id="pagar" >Pagar</span></button>
+                    <button type="button" class="btn btn-primary-red" onclick="CerrarSesion()"><span id="loaderGestion" >Salir</span></button>
+                </div>
+                `;
         
             $('#modalContent').html(contModal);
             $('#modalContentGeneral').modal({
                 'show': true,
                 'backdrop': 'static'
             });
+
+            document.getElementById('pagar').addEventListener('click', function() {
+                // Redireccionar a la página deseada
+                // console.log("AQUI ESTOY");
+                window.open ('https://www.fna.gov.co:8081/CWC/services/cobis/web/app/index.html#!/login ', '_blank');
+            });
+
+            document.getElementById('factura').addEventListener('click', function() {
+                // Redireccionar a la página deseada
+                // console.log("AQUI ESTOY");
+                window.open ('https://api.whatsapp.com/send?phone=573102816209', '_blank');
+            });
+
             setTimeout(function(){
                 window.location.href = '<?= base_url(); ?>/logout';
             }, 120000);
@@ -1139,7 +1357,7 @@
                     idtronco
                 }
             });
-            //console.log(dataRama);
+            // console.log(dataRama);
 
             let selRamaGestion = $('#selRamaGestion');
 
@@ -1344,49 +1562,10 @@
             }
             formData += '&fecha_promesa=' + fecha_promesa;
 
-            //console.log(formData);
 
-            $.ajax({
-                type: "post",
-                url: "<?= base_url(); ?>/nuevogestion",
-                data: formData,
-                dataType: "json",
-                beforeSend: function() {
-                    $('#btnGuardarGestion').attr('disabled', 'disabled');
-                    $('#loaderGestion').html('<i class="fas fa-sync-alt fa-spin"></i>');
-                },
-                success: function(data) {
-                    //console.log(data);
-                    if (data.type == 'error') {
-                        Toast.fire({
-                            icon: 'error',
-                            title: data.message
-                        }).then((result) => {
-                            if (result) {
-                                $('#btnGuardarGestion').removeAttr('disabled');
-                                $('#loaderGestion').html('Enviar');
-                            }
-                        });
-                    } else {
-                        Toast.fire({
-                            icon: 'success',
-                            title: data.message
-                        }).then((result) => {
-                            if (result) {
-                                $('#btnGuardarGestion').removeAttr('disabled');
-                                $('#loaderGestion').html('Enviar');
-                                $('#modalContentGeneral').modal('hide');
-                                ConsultarCliente();
-                            }
-                        });
-                    }
-                },
-                error: function(err) {
-                    $('#btnGuardarGestion').removeAttr('disabled');
-                    $('#loaderGestion').html('Enviar');
-                    console.log(err)
-                }
-            });
+            
+
+          
         }
     </script>
 </body>
